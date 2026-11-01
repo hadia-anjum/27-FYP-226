@@ -18,7 +18,7 @@ $(OUT_DIR):
 
 $(OUT_DIR)/%.html: $(SRC_DIR)/%.md package-lock.json | $(OUT_DIR) node_modules
 	@echo "  BUILD $< -> $@"
-	@npm run --silent build -- $< $@
+	node tools/build.js $< $@
 
 check: node_modules  ## fail early if there is nothing to build
 	@test -d $(SRC_DIR) || { echo "ERROR: source directory $(SRC_DIR) not found"; exit 1; }
