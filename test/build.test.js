@@ -9,3 +9,5 @@ test('out directory contains generated HTML files', () => {
 });
 
 test('this always fails', () => assert.ok(false));
+
+test('this always fails', () => assert.ok(false));
