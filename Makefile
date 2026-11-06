@@ -1,43 +1,30 @@
-SRC_DIR := src
-OUT_DIR := out
-SOURCES := $(wildcard $(SRC_DIR)/*.md)
-OUTPUTS := $(patsubst $(SRC_DIR)/%.md,$(OUT_DIR)/%.html,$(SOURCES))
+all: build test package
 
-.PHONY: all deps check build test package clean ci help
+check:
+	node tools/build.js src/greeting.md out/greeting.html
+	node tools/build.js src/notes.md out/notes.html
+	node tools/build.js src/services.md out/services.html
 
-all: test  ## build and test everything (default)
+build:
+	mkdir -p out
+	node tools/build.js src/greeting.md out/greeting.html
+	node tools/build.js src/notes.md out/notes.html
+	node tools/build.js src/services.md out/services.html
 
-node_modules: package-lock.json
-	npm ci
-	@touch node_modules
+test:
+	node test/build.test.js
 
-deps: node_modules  ## install exactly what the lock file says
-
-$(OUT_DIR):
-	mkdir -p $(OUT_DIR)
-
-$(OUT_DIR)/%.html: $(SRC_DIR)/%.md package-lock.json | $(OUT_DIR) node_modules
-	@echo "  BUILD $< -> $@"
-	node tools/build.js $< $@
-
-check: node_modules  ## fail early if there is nothing to build
-	@test -d $(SRC_DIR) || { echo "ERROR: source directory $(SRC_DIR) not found"; exit 1; }
-	@test -n "$(SOURCES)" || { echo "ERROR: no .md files found in $(SRC_DIR)"; exit 1; }
-	@echo "check: $(words $(SOURCES)) source file(s) in $(SRC_DIR)"
-
-build: $(OUTPUTS)  ## build every out-of-date page
-
-test: build  ## run the test suite against what was built
-	@npm test --silent
-
-package: test  ## produce the versioned artifact
+package:
 	npm pack
 
-clean:  ## remove all generated files
-	rm -rf $(OUT_DIR) *.tgz
+ci:
+	npm ci
+	mkdir -p out
+	node tools/build.js src/greeting.md out/greeting.html
+	node tools/build.js src/notes.md out/notes.html
+	node tools/build.js src/services.md out/services.html
+	node test/build.test.js
+	npm pack
 
-ci: clean deps check test package  ## the build server entry point
-
-help:  ## show this help
-	@grep -E '^[a-z][a-zA-Z_-]*:.*?## ' $(MAKEFILE_LIST) \
-	 | sed 's/:.*## /\t/' | column -t -s "$$(printf '\t')"
+clean:
+	rm -rf out *.tgz
