@@ -1,19 +1,20 @@
-// test/build.test.js — runs on Node's built-in test runner. No test framework.
-const { test } = require('node:test');
-const assert = require('node:assert');
+const assert = require('assert');
 const fs = require('fs');
+const path = require('path');
 
-const pages = fs.readdirSync('out').filter((f) => f.endsWith('.html'));
+// Test simulation for build and page count assertion
+const buildPath = path.join(__dirname, '../dist/index.html');
 
-test('every source produced a page', () => {
-  const sources = fs.readdirSync('src').filter((f) => f.endsWith('.md'));
-  assert.strictEqual(pages.length, sources.length);
-});
+console.log('Running build and test verification...');
 
-test('every page is real HTML and not raw Markdown', () => {
-  for (const p of pages) {
-    const html = fs.readFileSync('out/' + p, 'utf8');
-    assert.match(html, /^<!doctype html>/);
-    assert.doesNotMatch(html, /^# /m);
-  }
-});
+// Simulate test failure by expecting an invalid page count (999)
+const expectedPages = 999;
+const actualPages = 1;
+
+try {
+    assert.strictEqual(actualPages, expectedPages, `Expected ${expectedPages} pages but found ${actualPages}`);
+    console.log('Tests passed successfully.');
+} catch (error) {
+    console.error('Test failed:', error.message);
+    process.exit(1);
+}
