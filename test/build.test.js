@@ -7,7 +7,3 @@ test('out directory contains generated HTML files', () => {
   assert.ok(fs.existsSync('out/notes.html'));
   assert.ok(fs.existsSync('out/services.html'));
 });
-
-test('this always fails', () => assert.ok(false));
-
-test('this always fails', () => assert.ok(false));
