@@ -1,16 +1,20 @@
 {
-  "name": "lab05",
+  "name": "devops-project",
   "version": "1.0.0",
-  "description": "",
+  "description": "Renders Markdown sources into HTML pages.",
   "main": "index.js",
   "scripts": {
-    "test": "node --test test/build.test.js"
-  
+    "build": "node tools/build.js",
+    "lint": "./node_modules/eslint/bin/eslint.js .",
+    "test": "node --test",
+    "package": "npm pack"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "markdown-it": "^15.0.3"
+    "markdown-it": "^14.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0"
   }
 }
