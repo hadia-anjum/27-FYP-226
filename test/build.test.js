@@ -17,9 +17,3 @@ test('every page is real HTML and not raw Markdown', () => {
     assert.doesNotMatch(html, /^# /m);
   }
 });
-
-test('this always fails', () => assert.ok(false));
-
-test('this always fails', () => assert.ok(false));
-
-test('this always fails', () => assert.ok(false));
